@@ -66,22 +66,32 @@ void setup(){
     esp_mqtt_client_register_event(klient, MQTT_EVENT_ANY, kaj_se_dogaja , NULL);
     char message[] = "esp_ connected.";
     int a = esp_mqtt_client_publish(klient, "banana", message, 0, 0, 1);
-    log_i("Publihs je vrnil kodo %d.", a);
+    
 
     esp_mqtt_client_subscribe(klient, "banana", 0);
 }
  void loop(){
+  //if a message updatge is posted into update topic, the code will execute
      if(digitalRead(BUTTON) == LOW){
         
             float Temperatura = dht.getTemperature();
-            String message = "Temperatura je " + String(Temperatura) + " °C";
+            String message = String(Temperatura);
             char messageArray[message.length() + 1];
             message.toCharArray(messageArray, message.length() + 1);
-            int a = esp_mqtt_client_publish(klient, "banana", messageArray, 0, 0, 1);
-            log_i("Publihs je vrnil kodo %d.", a);
-            cas = 10;
-            delay (10000);
+            int a = esp_mqtt_client_publish(klient, "Temperatura", messageArray, 0, 0, 1);
+            delay(100);
+            float moisture = dht.getHumidity();
+            String message1 = String(moisture);
+            char messageArray1[message1.length() + 1];
+            message1.toCharArray(messageArray1, message1.length() + 1);
+            int a1 = esp_mqtt_client_publish(klient, "Vlaga", messageArray1, 0, 0, 1);
+            
+            
+            
+
+          
+            delay (1800);
         
     
- }
+    }
  }
